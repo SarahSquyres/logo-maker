@@ -1,6 +1,8 @@
 const {prompt} = require('inquirer');
-const { writeFile } = require('fs/promises');
-
+// const { writeFile } = require('fs/promises');
+// const (Circle, Square, Triangle) = require('./lib/shapes');
+// const SVG = require('./lib/SVG');
+const validateColor = require("validate-color").default;
 
 function init(){
 prompt([
@@ -21,9 +23,11 @@ prompt([
         message: 'Choose a color for your text (response may be a hexadecimal number):',
         validate: (textColor) => {
             if (textColor == '') {
-                return 'Please select a color'
-            }
-            return true;
+                return 'Error: Empty input'
+            } else if (textColor && textColor !== '' && validateColor(textColor)) {
+                return true;
+              } 
+              return 'Error: Invalid color';
         }
     },
     {
@@ -38,9 +42,11 @@ prompt([
         message: 'Choose a color for your shape (response may be a hexadecimal number):',
         validate: (shapeColor) => {
             if (shapeColor == '') {
-                return 'Please select a color'
-            }
-            return true;
+                return 'Error: Empty input'
+            }else if (shapeColor && shapeColor !== '' && validateColor(shapeColor)) {
+                return true;
+              } 
+              return 'Error: Invalid color';
         }
     },
 ])
