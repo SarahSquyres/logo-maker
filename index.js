@@ -1,10 +1,12 @@
 const { prompt } = require('inquirer');
 const validateColor = require("validate-color").default;
-const { Triangle, Circle, Square } = require('./lib/shapes');
+const { Circle, Square, Triangle } = require('./lib/shapes');
 const { writeFileSync } = require('fs');
 
 
 function init() {
+    // Class constructor named Svg, initializes text and shape properties to empty strings.
+    // Render method inserts the shape and text properties of the object into svg element
     class Svg {
         constructor() {
             this.text = '';
@@ -15,7 +17,7 @@ function init() {
             return `<svg version="1.1" xmlns="http://www.w3.org/2000/svg" width="300" height="200">${this.shape}${this.text}</svg>`
         }
         setText(text, textColor) {
-            this.text = `<text x="150" y="125" font-size="60" text-anchor="middle" fill="${textColor}">${text}</text>`
+            this.text = `<text x="150" y="125" font-size="40" text-anchor="middle" fill="${textColor}">${text}</text>`
         }
         setShape(shape) {
             this.shape = shape.render();
@@ -24,11 +26,12 @@ function init() {
 
     };
 
+    // Prompt objects used to collect user input
     prompt([
         {
             type: 'input',
             name: 'text',
-            message: 'Please enter up to three letters for logo:',
+            message: 'Please enter up to three characters for logo:',
             validate: (text) => {
                 if (text.length > 3) {
                     return 'Response should be no greater than 3 characters'
@@ -53,7 +56,7 @@ function init() {
         },
         {
             type: 'list',
-            name: 'shape',
+            name: 'logoShape',
             message: 'Choose a shape for your logo:',
             choices: ['Circle', 'Square', 'Triangle'],
         },
@@ -71,15 +74,16 @@ function init() {
             }
         },
     ])
-        .then(({ text, textColor, shape, shapeColor }) => {
-            let shapes;
-            switch (shapes) {
-                case 'circle':
+    // .then executes after the prompt method, takes the user input as an argument
+        .then(({ text, textColor, logoShape, shapeColor }) => {
+            let shape;
+            switch (logoShape) {
+                case 'Circle':
                     shape = new Circle();
                     shape.setShapeColor(shapeColor);
                     break;
 
-                case 'square':
+                case 'Square':
                     shape = new Square();
                     shape.setShapeColor(shapeColor);
                     break;
